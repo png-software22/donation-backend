@@ -1,8 +1,14 @@
 import { Column, HasMany, Table, Model } from 'sequelize-typescript';
 import { City } from './city.model';
 
+export interface StateCreationAttrs {
+  name: string;
+  Abbreviation: string;
+}
+
+
 @Table
-export class State extends Model {
+export class State extends Model<State, StateCreationAttrs>  {
   @Column
   name: string;
 
