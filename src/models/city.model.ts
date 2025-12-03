@@ -1,4 +1,11 @@
-import { Column, Table, Model, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import {
+  Column,
+  Table,
+  Model,
+  BelongsTo,
+  ForeignKey,
+  AllowNull,
+} from 'sequelize-typescript';
 import { State } from './state.model';
 
 interface CityCreationAttrs {
@@ -14,6 +21,9 @@ export class City extends Model<City, CityCreationAttrs> {
 
   @Column
   abbreviation: string;
+
+  @Column
+  zipCode: string;
 
   @ForeignKey(() => State)
   @Column
