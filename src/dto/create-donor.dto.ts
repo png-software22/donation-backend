@@ -1,4 +1,4 @@
-export class CreateUserDTO {
+export class CreateDonorDTO {
   firstName: string;
   lastName: string;
   phoneNumber: string;

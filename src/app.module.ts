@@ -9,9 +9,9 @@ import { CityController } from './controller/city.controller';
 import { AppService } from './app.service';
 import { StateService } from './services/state.service';
 import { CityService } from './services/city.service';
-import { UserController } from './controller/user.controller';
-import { UserService } from './services/user.service';
-import { User } from './models/user.model';
+import { DonorController } from './controller/donor.controller';
+import { DonorService } from './services/donor.service';
+import { Donor } from './models/donor.model';
 
 @Module({
   imports: [
@@ -31,14 +31,19 @@ import { User } from './models/user.model';
         database: config.get('POSTGRES_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
-        models: [City, State,User],
+        models: [City, State, Donor],
       }),
       inject: [ConfigService],
     }),
 
-    SequelizeModule.forFeature([City, State, User]), // what is purpose of this line
+    SequelizeModule.forFeature([City, State, Donor]), // what is purpose of this line
   ],
-  controllers: [AppController, StateController, CityController, UserController],
-  providers: [AppService, StateService, CityService, UserService]
+  controllers: [
+    AppController,
+    StateController,
+    CityController,
+    DonorController,
+  ],
+  providers: [AppService, StateService, CityService, DonorService],
 })
 export class AppModule {}

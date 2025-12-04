@@ -19,7 +19,7 @@ export enum IDProofType {
 }
 
 @Table
-export class User extends Model {
+export class Donor extends Model {
   @Column
   firstName: string;
 
@@ -42,6 +42,9 @@ export class User extends Model {
 
   @Column
   streetAddress: string;
+
+  @Column
+  customAddress: string;
 
   @ForeignKey(() => State)
   @Column
