@@ -11,11 +11,6 @@ export class CityController {
     return this.cityService.create(dto);
   }
 
-  @Get()
-  getAll() {
-    return this.cityService.findAll();
-  }
-
   @Get(':stateId')
   getCitiesByState(@Param('stateId') stateId: string) {
     return this.cityService.findByState(Number(stateId));

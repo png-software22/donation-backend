@@ -31,7 +31,7 @@ import { User } from './models/user.model';
         database: config.get('POSTGRES_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
-        models: [City, State],
+        models: [City, State,User],
       }),
       inject: [ConfigService],
     }),

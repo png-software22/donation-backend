@@ -11,10 +11,18 @@ import { State } from './state.model';
 interface CityCreationAttrs {
   name: string;
   abbreviation: string;
+  zipCode: string;
   stateId: number;
 }
 
-@Table
+@Table({
+  indexes: [
+    {
+      unique: true,
+      fields: ['name', 'stateId'], // same city name twice in same state not allowed
+    },
+  ],
+})
 export class City extends Model<City, CityCreationAttrs> {
   @Column
   name: string;
