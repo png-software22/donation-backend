@@ -48,4 +48,30 @@ export class DonorService {
       include: { all: true },
     });
   }
+  async searchWithFilter(filterBy: string, value: string) {
+    if (filterBy !== 'phoneNumber' && filterBy !== 'idProofNumber') {
+      throw new BadRequestException(`${filterBy} is not handled`);
+    }
+    if (!value) {
+      throw new BadRequestException(`value is required`);
+    }
+    let donors: any = { data: [], count: 0 };
+    if (filterBy === 'phoneNumber') {
+      const donorsList = await this.donorModel.findAll({
+        where: { phoneNumber: value },
+        include: { all: true },
+      });
+      donors.data = donorsList;
+      donors.count = donorsList.length;
+    }
+    if (filterBy === 'idProofNumber') {
+      const donorsList = await this.donorModel.findAll({
+        where: { idProofNumber: value },
+        include: { all: true },
+      });
+      donors.data = donorsList;
+      donors.count = donorsList.length;
+    }
+    return donors;
+  }
 }
