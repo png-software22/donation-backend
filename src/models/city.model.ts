@@ -16,6 +16,8 @@ interface CityCreationAttrs {
 }
 
 @Table({
+   timestamps: false, 
+  tableName: "Cities",
   indexes: [
     {
       unique: true,

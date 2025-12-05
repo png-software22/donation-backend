@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateDonorDTO } from 'src/dto/create-donor.dto';
 import { DonorService } from 'src/services/donor.service';
+import { Param } from '@nestjs/common/decorators';
 
 @Controller('donors')
 export class DonorController {
@@ -19,7 +20,15 @@ export class DonorController {
   // ?donors/search?filterBy=idProofNumber&value=1231231
   // filter by are allowed with phoneNumber & idProofNumber
   @Get('search')
-  searchDonors(@Query('filterBy') filterBy:string , @Query('value') value: string) {
+  searchDonors(
+    @Query('filterBy') filterBy: string,
+    @Query('value') value: string,
+  ) {
     return this.DonorService.searchWithFilter(filterBy, value);
+  }
+
+  @Get(':id')
+  async getDonor(@Param('id') id: string) {
+    return await this.DonorService.getDonorById(+id);
   }
 }

@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { State } from '../models/state.model';
 import { CreateStateDto } from '../dto/create-state.dto';
 import { Op } from 'sequelize';
+
 @Injectable()
 export class StateService {
   constructor(

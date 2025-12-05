@@ -7,7 +7,10 @@ export interface StateCreationAttrs {
 }
 
 
-@Table
+@Table({
+  timestamps: false,   
+  tableName: "States"  
+})
 export class State extends Model<State, StateCreationAttrs>  {
   @Column
   name: string;
