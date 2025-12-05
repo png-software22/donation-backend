@@ -25,19 +25,21 @@ export class DonorService {
       throw new BadRequestException('Phone number already exists');
     }
 
-    const state = await this.stateModel.findByPk(donor.stateId);
-    if (!state) {
-      throw new BadRequestException(`Invalid stateId`);
-    }
+    if (!donor.customAddress) {
+      const state = await this.stateModel.findByPk(donor.stateId);
+      if (!state) {
+        throw new BadRequestException(`Invalid stateId`);
+      }
 
-    const city = await this.cityModel.findOne({
-      where: { id: donor.cityId, stateId: donor.stateId },
-    });
+      const city = await this.cityModel.findOne({
+        where: { id: donor.cityId, stateId: donor.stateId },
+      });
 
-    if (!city) {
-      throw new BadRequestException(
-        `City with id ${donor.cityId} does not belong to state ${donor.stateId}`,
-      );
+      if (!city) {
+        throw new BadRequestException(
+          `City with id ${donor.cityId} does not belong to state ${donor.stateId}`,
+        );
+      }
     }
 
     return this.donorModel.create(donor as any);
@@ -48,33 +50,31 @@ export class DonorService {
       include: { all: true },
     });
   }
-async getDonorById(id: number) {
-  return await this.donorModel.findByPk(id, {
-    include: { all: true },
-  });
-}
-
-async searchWithFilter(filterBy: string, value: string) {
-  const allowedFilters = ['phoneNumber', 'idProofNumber'];
-
-  if (!allowedFilters.includes(filterBy)) {
-    throw new BadRequestException(`${filterBy} is not handled`);
+  async getDonorById(id: number) {
+    return await this.donorModel.findByPk(id, {
+      include: { all: true },
+    });
   }
 
-  if (!value) {
-    throw new BadRequestException(`value is required`);
+  async searchWithFilter(filterBy: string, value: string) {
+    const allowedFilters = ['phoneNumber', 'idProofNumber'];
+
+    if (!allowedFilters.includes(filterBy)) {
+      throw new BadRequestException(`${filterBy} is not handled`);
+    }
+
+    if (!value) {
+      throw new BadRequestException(`value is required`);
+    }
+
+    const donorsList = await this.donorModel.findAll({
+      where: { [filterBy]: value },
+      include: { all: true },
+    });
+
+    return {
+      data: donorsList,
+      count: donorsList.length,
+    };
   }
-
-  const donorsList = await this.donorModel.findAll({
-    where: { [filterBy]: value },
-    include: { all: true },
-  });
-
-  return {
-    data: donorsList,
-    count: donorsList.length,
-  };
-}
-
-
 }

@@ -7,4 +7,5 @@ export class CreateDonorDTO {
   streetAddress: string;
   stateId: number;
   cityId: number;
+  customAddress?:string;
 }
