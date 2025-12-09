@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateDonorDTO } from 'src/dto/create-donor.dto';
 import { DonorService } from 'src/services/donor.service';
-import { Param } from '@nestjs/common/decorators';
+import { Param, Put } from '@nestjs/common/decorators';
 
 @Controller('donors')
 export class DonorController {
@@ -30,5 +30,13 @@ export class DonorController {
   @Get(':id')
   async getDonor(@Param('id') id: string) {
     return await this.DonorService.getDonorById(+id);
+  }
+
+  @Put(':id/updateDonor')
+  async updateDonor(
+    @Param('id') id: string,
+    @Body() donor: CreateDonorDTO,
+  ) {
+    return await this.DonorService.updateDonor(+id, donor);
   }
 }
