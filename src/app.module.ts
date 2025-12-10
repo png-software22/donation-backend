@@ -12,6 +12,8 @@ import { CityService } from './services/city.service';
 import { DonorController } from './controller/donor.controller';
 import { DonorService } from './services/donor.service';
 import { Donor } from './models/donor.model';
+import { DonationService } from './services/donation.service';
+import { DonationController } from './controller/donation.controller';
 import { Donation } from './models/donation.model';
 
 @Module({
@@ -37,14 +39,15 @@ import { Donation } from './models/donation.model';
       inject: [ConfigService],
     }),
 
-    SequelizeModule.forFeature([City, State, Donor, Donation]), // what is purpose of this line
+    SequelizeModule.forFeature([City, State, Donor,Donation]), // what is purpose of this line
   ],
   controllers: [
     AppController,
     StateController,
     CityController,
     DonorController,
+    DonationController
   ],
-  providers: [AppService, StateService, CityService, DonorService],
+  providers: [AppService, StateService, CityService, DonorService,DonationService],
 })
 export class AppModule {}

@@ -11,6 +11,7 @@ import { Col } from 'sequelize/lib/utils';
 
 export enum DonationMethods {
   CASH = 'CASH',
+ ONLINE ='ONLINE',
   UPI = 'UPI',
   CHEQUE = 'CHEQUE',
   RTGS = 'RTGS',
