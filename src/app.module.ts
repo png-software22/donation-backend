@@ -34,7 +34,7 @@ import { Donation } from './models/donation.model';
         database: config.get('POSTGRES_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
-        models: [City, State, Donor],
+        models: [City, State, Donor,Donation],
       }),
       inject: [ConfigService],
     }),

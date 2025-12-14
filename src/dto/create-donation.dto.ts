@@ -3,6 +3,8 @@ export class CreateDonationDto {
   method: string;
   referenceNo?: string;
   amount: number;
-  date?: Date;
+  date?: string;
   bankName?: string;
 }
+
+
