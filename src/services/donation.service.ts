@@ -2,6 +2,7 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  StreamableFile,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Donation } from '../models/donation.model';
@@ -10,6 +11,8 @@ import { Donor } from '../models/donor.model';
 import { literal, Op } from 'sequelize';
 import { State } from 'src/models/state.model';
 import { City } from 'src/models/city.model';
+import puppeteer from 'puppeteer';
+import { DonationReceiptTemplate } from 'src/templates/donationReceipt.template';
 
 @Injectable()
 export class DonationService {
@@ -191,5 +194,31 @@ export class DonationService {
       resp.city = city;
       return resp;
     }
+  }
+  async generateDonationReceipt(serialNumber: any): Promise<StreamableFile> {
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const res = await this.donationModel.findOne({
+      where: {
+        donationSerialNumber: serialNumber,
+      },
+    });
+    const page = await browser.newPage();
+    const html = DonationReceiptTemplate(res?.dataValues);
+
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '15mm', bottom: '15mm', left: '15mm', right: '15mm' },
+    });
+
+    await browser.close();
+
+    return new StreamableFile(pdfBuffer);
   }
 }

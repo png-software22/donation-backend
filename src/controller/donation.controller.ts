@@ -22,6 +22,10 @@ export class DonationController {
     return await this.donationService.getDonation(uniqueId);
   }
 
+  @Get('printReceipt/:serialNumber')
+  async printReceipt(@Param('serialNumber') serialNumber: string) {
+    return await this.donationService.generateDonationReceipt(serialNumber);
+  }
   @Get('list')
   async getDonationList(
     @Query('phone') phone: string,
