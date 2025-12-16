@@ -7,13 +7,17 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Donation } from '../models/donation.model';
 import { CreateDonationDto } from '../dto/create-donation.dto';
 import { Donor } from '../models/donor.model';
-import { Op } from 'sequelize';
+import { literal, Op } from 'sequelize';
+import { State } from 'src/models/state.model';
+import { City } from 'src/models/city.model';
 
 @Injectable()
 export class DonationService {
   constructor(
     @InjectModel(Donation) private donationModel: typeof Donation,
     @InjectModel(Donor) private donorModel: typeof Donor,
+    @InjectModel(State) private stateModel: typeof State,
+    @InjectModel(City) private cityModel: typeof City,
   ) {}
 
   async createDonation(dto: CreateDonationDto) {
@@ -162,5 +166,30 @@ export class DonationService {
   private parseDateEnd(d: string): Date {
     const [day, month, year] = d.split('-');
     return new Date(`${year}-${month}-${day}T23:59:59.999Z`);
+  }
+
+  async getDonation(id: string | number) {
+    const isId = Number(id);
+    const where: any = {};
+    if (!isId) {
+      where.donationSerialNumber = id;
+    } else {
+      where.id = id;
+    }
+    const res = await this.donationModel.findOne({
+      where,
+    });
+    if (!res) {
+      throw new NotFoundException({
+        message: 'No Donation found with id ' + id,
+      });
+    } else {
+      const resp: any = { ...res.dataValues };
+      const state = await this.stateModel.findByPk(res.donorStateId);
+      const city = await this.cityModel.findByPk(res.donorCityId);
+      resp.state = state;
+      resp.city = city;
+      return resp;
+    }
   }
 }

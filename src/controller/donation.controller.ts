@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { DonationService } from '../services/donation.service';
 import { CreateDonationDto } from '../dto/create-donation.dto';
 
@@ -15,6 +15,11 @@ export class DonationController {
       message: 'Donation Added Successfully',
       data: result.donation,
     };
+  }
+
+  @Get('getBySerialNumberOrId/:uniqueId')
+  async getDonation(@Param('uniqueId') uniqueId: string) {
+    return await this.donationService.getDonation(uniqueId);
   }
 
   @Get('list')
