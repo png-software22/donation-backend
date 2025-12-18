@@ -8,10 +8,12 @@ import {
 } from 'sequelize-typescript';
 import { Donor, IDProofType } from './donor.model';
 import { Col } from 'sequelize/lib/utils';
+import { State } from './state.model';
+import { City } from './city.model';
 
 export enum DonationMethods {
   CASH = 'CASH',
- ONLINE ='ONLINE',
+  ONLINE = 'ONLINE',
   UPI = 'UPI',
   CHEQUE = 'CHEQUE',
   RTGS = 'RTGS',
@@ -27,7 +29,7 @@ export class Donation extends Model {
   donor: Donor;
 
   @Column
-  donationSerialNumber: string; // auto calculate
+  donationSerialNumber: string;
 
   @Column
   chequeOrUpiReferenceNumber: string;
@@ -36,7 +38,7 @@ export class Donation extends Model {
   amount: number;
 
   @Column
-  donationDate: Date; // only if back date is allowed
+  donationDate: Date;
 
   @Column({
     type: DataType.ENUM(...Object.values(DonationMethods)),
@@ -71,9 +73,17 @@ export class Donation extends Model {
   @Column
   donorCustomAddress: string;
 
+  @ForeignKey(() => State)
   @Column
   donorStateId: number;
 
+  @BelongsTo(() => State)
+  state: State;
+
+  @ForeignKey(() => City)
   @Column
   donorCityId: number;
+
+  @BelongsTo(() => City)
+  city: City;
 }

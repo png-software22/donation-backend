@@ -42,15 +42,15 @@ export class DonationService {
       amount: dto.amount,
       donationDate: donationDate,
       bankName: dto.method === 'CASH' ? null : dto.bankName,
-      donorFirstName: donor.firstName,
-      donorLastName: donor.lastName,
-      donorPhoneNumber: donor.phoneNumber,
-      donorIdProofType: donor.idProofType,
-      donorIdProofNumber: donor.idProofNumber,
-      donorStreetAddress: donor.streetAddress,
-      donorCustomAddress: donor.customAddress,
-      donorStateId: donor.stateId,
-      donorCityId: donor.cityId,
+      donorFirstName: donor.dataValues.firstName,
+      donorLastName: donor.dataValues.lastName,
+      donorPhoneNumber: donor.dataValues.phoneNumber,
+      donorIdProofType: donor.dataValues.idProofType,
+      donorIdProofNumber: donor.dataValues.idProofNumber,
+      donorStreetAddress: donor.dataValues.streetAddress,
+      donorCustomAddress: donor.dataValues.customAddress,
+      donorStateId: donor.dataValues.stateId,
+      donorCityId: donor.dataValues.cityId,
     });
 
     return {
@@ -128,11 +128,29 @@ export class DonationService {
 
     const offset = (page - 1) * pageSize;
 
+    const res = await this.donationModel.findOne({
+      where,
+      include: [
+        {
+          model: State,
+          attributes: ['id', 'name', 'Abbreviation'],
+        },
+        {
+          model: City,
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
     const result = await this.donationModel.findAndCountAll({
       where,
       limit: pageSize,
       offset,
       order: [['donationDate', 'DESC']],
+      include: [
+        { model: State, attributes: ['name'] },
+        { model: City, attributes: ['name'] },
+      ],
     });
 
     return {
