@@ -1,4 +1,4 @@
-export const DonationReceiptTemplate = () => {
+export const DonationReceiptTemplate = (data) => {
   return `
     <!DOCTYPE html>
 <html>
@@ -62,7 +62,7 @@ export const DonationReceiptTemplate = () => {
   <table class="w-full mb-2">
     <tr>
       <td class="font-semibold w-[25%]">Name:</td>
-      <td class="border-b border-black">Abhinav Agarwal</td>
+      <td class="border-b border-black">${data.donorFirstName} ${data.donorLastName}</td>
     </tr>
   </table>
 
@@ -80,8 +80,8 @@ export const DonationReceiptTemplate = () => {
       <td class="font-semibold w-[25%]">Mobile No.:</td>
       <td class="border-b border-black w-[30%]">9415416205</td>
       <td class="font-semibold w-[20%] pl-2">ID Proof Details:</td>
-      <td class="border-b border-black w-[15%]">Aadhaar Card</td>
-      <td class="border-b border-black w-[20%] pl-2">755693758069</td>
+      <td class="border-b border-black w-[15%]">${data.donorIdProofType}</td>
+      <td class="border-b border-black w-[20%] pl-2">${data.donorIdProofNumber}</td>
     </tr>
   </table>
 
@@ -89,7 +89,7 @@ export const DonationReceiptTemplate = () => {
   <table class="w-full mb-2">
     <tr>
       <td class="font-semibold w-[25%]">Amount in Words:</td>
-      <td class="border-b border-black">Two Thousands Rupees Only</td>
+      <td class="border-b border-black">${data.amount}</td>
     </tr>
   </table>
 
