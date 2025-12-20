@@ -96,14 +96,14 @@ export class DonationService {
         );
 
       const val = Number(amount);
-      const filter = Number(amountFilter);
+      const filter = amountFilter;
 
-      if (filter === 1) where.amount = { [Op.lt]: val };
-      else if (filter === 2) where.amount = { [Op.gt]: val };
-      else if (filter === 3) where.amount = val;
+      if (filter === 'lt') where.amount = { [Op.lt]: val };
+      else if (filter === 'gt') where.amount = { [Op.gt]: val };
+      else if (filter === 'eq') where.amount = val;
       else
         throw new BadRequestException(
-          'Invalid amountFilter. Use 1 (lt), 2 (gt), 3 (eq)',
+          'Invalid amountFilter. Use (lt), (gt), (eq)',
         );
     }
     if (date && !this.isValidDDMMYYYY(date))
