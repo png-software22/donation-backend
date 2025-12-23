@@ -1,4 +1,24 @@
+const formatDate = (date: Date | string) => {
+  const d = new Date(date);
+  return d.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
+const getDayName = (date: Date | string) => {
+  if (!date) return '';
+
+  return new Date(date).toLocaleDateString('en-GB', {
+    weekday: 'long',
+    timeZone: 'Asia/Kolkata',
+  });
+};
+
 export const DonationReceiptTemplate = (data) => {
+  console.log('🔹 Receipt Data:', JSON.stringify(data, null, 2));
+  console.log('Has city:', 'city' in data, data.city);
   return `
     <!DOCTYPE html>
 <html>
@@ -53,8 +73,9 @@ export const DonationReceiptTemplate = (data) => {
       <td class="font-semibold w-[25%]">Serial No.:</td>
       <td class="border-b border-black w-[40%]">DA0009597</td>
       <td class="font-semibold w-[10%] pl-4">Date</td>
-      <td class="border-b border-black w-[10%] text-center">5</td>
-      <td class="border-b border-black w-[15%] text-center">October</td>
+      <td class="border-b border-black text-right">
+        ${formatDate(data.donationDate)}
+      </td>
     </tr>
   </table>
 
@@ -70,7 +91,11 @@ export const DonationReceiptTemplate = (data) => {
   <table class="w-full mb-2">
     <tr>
       <td class="font-semibold w-[25%]">Address:</td>
-      <td class="border-b border-black">Blank</td>
+      <td class="border-b border-black">
+        ${[data.donorStreetAddress, data.city?.name, data.state?.name]
+          .filter(Boolean)
+          .join(', ')}
+      </td>
     </tr>
   </table>
 
@@ -78,7 +103,7 @@ export const DonationReceiptTemplate = (data) => {
   <table class="w-full mb-2">
     <tr>
       <td class="font-semibold w-[25%]">Mobile No.:</td>
-      <td class="border-b border-black w-[30%]">9415416205</td>
+      <td class="border-b border-black w-[30%]">${data.donorPhoneNumber}</td>
       <td class="font-semibold w-[20%] pl-2">ID Proof Details:</td>
       <td class="border-b border-black w-[15%]">${data.donorIdProofType}</td>
       <td class="border-b border-black w-[20%] pl-2">${data.donorIdProofNumber}</td>
@@ -134,7 +159,8 @@ export const DonationReceiptTemplate = (data) => {
   <!-- Footer -->
   <div class="flex justify-between text-sm mt-4 pt-2 border-t border-black">
     <div>
-      Sunday, 5 October, 2025 &nbsp;&nbsp; 7:49:59 am
+   ${getDayName(data.donationDate)}, ${formatDate(data.donationDate)}
+
     </div>
     <div class="text-right">
       FOR SHREE SANTOSH CHARITABLE TRUST<br/>

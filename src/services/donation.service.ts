@@ -213,6 +213,7 @@ export class DonationService {
       return resp;
     }
   }
+
   async generateDonationReceipt(serialNumber: any): Promise<StreamableFile> {
     const browser = await puppeteer.launch({
       headless: true,
@@ -223,7 +224,18 @@ export class DonationService {
       where: {
         donationSerialNumber: serialNumber,
       },
+      include: [
+        {
+          model: State,
+          attributes: ['id', 'name'],
+        },
+        {
+          model: City,
+          attributes: ['id', 'name'],
+        },
+      ],
     });
+
     const page = await browser.newPage();
     const html = DonationReceiptTemplate(res?.dataValues);
 

@@ -15,6 +15,10 @@ import { Donor } from './models/donor.model';
 import { DonationService } from './services/donation.service';
 import { DonationController } from './controller/donation.controller';
 import { Donation } from './models/donation.model';
+import { Expense } from './models/expense.model';
+import { ExpenseController } from './controller/expense.controller';
+import { ExpenseService } from './services/expense.service';
+
 
 @Module({
   imports: [
@@ -34,20 +38,21 @@ import { Donation } from './models/donation.model';
         database: config.get('POSTGRES_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
-        models: [City, State, Donor,Donation],
+        models: [City, State, Donor,Donation,Expense],
       }),
       inject: [ConfigService],
     }),
 
-    SequelizeModule.forFeature([City, State, Donor,Donation]), // what is purpose of this line
+    SequelizeModule.forFeature([City, State, Donor,Donation,Expense]), // what is purpose of this line
   ],
   controllers: [
     AppController,
     StateController,
     CityController,
     DonorController,
-    DonationController
+    DonationController,
+    ExpenseController
   ],
-  providers: [AppService, StateService, CityService, DonorService,DonationService],
+  providers: [AppService, StateService, CityService, DonorService,DonationService, ExpenseService],
 })
 export class AppModule {}
