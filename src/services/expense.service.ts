@@ -5,9 +5,7 @@ import { CreateExpenseDto } from '../dto/create-expense.dto';
 
 @Injectable()
 export class ExpenseService {
-  constructor(
-    @InjectModel(Expense) private expenseModel: typeof Expense,
-  ) {}
+  constructor(@InjectModel(Expense) private expenseModel: typeof Expense) {}
 
   async createExpense(body: CreateExpenseDto) {
     if (

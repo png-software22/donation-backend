@@ -18,13 +18,21 @@ import { Donation } from './models/donation.model';
 import { Expense } from './models/expense.model';
 import { ExpenseController } from './controller/expense.controller';
 import { ExpenseService } from './services/expense.service';
-
+import { User } from './models/user.model';
+import { UserService } from './services/user.service';
+import { UserController } from './controller/user.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './guards/jwt.stategy';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+    }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'super-secret-key',
+      signOptions: { expiresIn: '1d' },
     }),
 
     SequelizeModule.forRootAsync({
@@ -38,12 +46,12 @@ import { ExpenseService } from './services/expense.service';
         database: config.get('POSTGRES_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
-        models: [City, State, Donor,Donation,Expense],
+        models: [City, State, Donor, Donation, Expense, User],
       }),
       inject: [ConfigService],
     }),
 
-    SequelizeModule.forFeature([City, State, Donor,Donation,Expense]), // what is purpose of this line
+    SequelizeModule.forFeature([City, State, Donor, Donation, Expense, User]), // what is purpose of this line
   ],
   controllers: [
     AppController,
@@ -51,8 +59,18 @@ import { ExpenseService } from './services/expense.service';
     CityController,
     DonorController,
     DonationController,
-    ExpenseController
+    ExpenseController,
+    UserController,
   ],
-  providers: [AppService, StateService, CityService, DonorService,DonationService, ExpenseService],
+  providers: [
+    AppService,
+    StateService,
+    CityService,
+    DonorService,
+    DonationService,
+    ExpenseService,
+    UserService,
+    JwtStrategy,
+  ],
 })
 export class AppModule {}

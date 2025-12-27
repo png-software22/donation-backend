@@ -17,8 +17,6 @@ const getDayName = (date: Date | string) => {
 };
 
 export const DonationReceiptTemplate = (data) => {
-  console.log('🔹 Receipt Data:', JSON.stringify(data, null, 2));
-  console.log('Has city:', 'city' in data, data.city);
   return `
     <!DOCTYPE html>
 <html>
@@ -92,9 +90,13 @@ export const DonationReceiptTemplate = (data) => {
     <tr>
       <td class="font-semibold w-[25%]">Address:</td>
       <td class="border-b border-black">
-        ${[data.donorStreetAddress, data.city?.name, data.state?.name]
-          .filter(Boolean)
-          .join(', ')}
+        ${
+          data?.customAddress
+            ? data?.customAddress
+            : [data.donorStreetAddress, data.city?.name, data.state?.name]
+                .filter(Boolean)
+                .join(', ')
+        }
       </td>
     </tr>
   </table>

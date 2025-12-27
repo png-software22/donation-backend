@@ -1,9 +1,11 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CreateDonorDTO } from 'src/dto/create-donor.dto';
 import { DonorService } from 'src/services/donor.service';
-import { Param, Put } from '@nestjs/common/decorators';
+import { Param, Put, UseGuards } from '@nestjs/common/decorators';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('donors')
+@UseGuards(JwtAuthGuard)
 export class DonorController {
   constructor(private readonly DonorService: DonorService) {}
   @Post()

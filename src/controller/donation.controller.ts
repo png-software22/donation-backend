@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { DonationService } from '../services/donation.service';
 import { CreateDonationDto } from '../dto/create-donation.dto';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('donations')
+@UseGuards(JwtAuthGuard)
 export class DonationController {
   constructor(private readonly donationService: DonationService) {}
 
@@ -26,7 +36,7 @@ export class DonationController {
   async printReceipt(@Param('serialNumber') serialNumber: string) {
     return await this.donationService.generateDonationReceipt(serialNumber);
   }
-  
+
   @Get('list')
   async getDonationList(
     @Query('phone') phone: string,

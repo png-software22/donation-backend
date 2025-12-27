@@ -77,7 +77,7 @@ export class DonorService {
       count: donorsList.length,
     };
   }
-  async updateDonor(id: number, updateDonorDto: any){
+  async updateDonor(id: number, updateDonorDto: any) {
     await this.donorModel.update(updateDonorDto, {
       where: { id },
     });
