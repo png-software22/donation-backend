@@ -13,6 +13,7 @@ import { State } from 'src/models/state.model';
 import { City } from 'src/models/city.model';
 import puppeteer from 'puppeteer';
 import { DonationReceiptTemplate } from 'src/templates/donationReceipt.template';
+import * as ExcelJS from 'exceljs';
 
 @Injectable()
 export class DonationService {
@@ -295,5 +296,158 @@ export class DonationService {
       message: 'Donation marked as void successfully',
       data: donation,
     };
+  }
+
+  async exportDonationsToExcel(filters: any): Promise<Buffer> {
+    const {
+      phone,
+      stateId,
+      cityId,
+      method,
+      amount,
+      amountFilter,
+      date,
+      startDate,
+      endDate,
+      isVoid,
+      includeVoid,
+      onlyVoid,
+    } = filters;
+
+    const where: any = {};
+
+    if (amount && isNaN(Number(amount)))
+      throw new BadRequestException('Amount must be a valid number');
+    if (phone && phone.length < 8)
+      throw new BadRequestException('Invalid phone number');
+
+    if (phone) where.donorPhoneNumber = phone;
+    if (stateId) where.donorStateId = stateId;
+    if (cityId) where.donorCityId = cityId;
+    if (method) where.method = method;
+
+    // Enhanced void filtering logic
+    if (onlyVoid === 'true' || onlyVoid === '1') {
+      where.isVoid = true;
+    } else if (includeVoid === 'true' || includeVoid === '1') {
+      // Don't add any filter on isVoid
+    } else if (isVoid !== undefined && isVoid !== null && isVoid !== '') {
+      const voidValue = isVoid === 'true' || isVoid === '1';
+      where.isVoid = voidValue;
+    } else {
+      where.isVoid = false;
+    }
+
+    if (amountFilter) {
+      if (!amount)
+        throw new BadRequestException(
+          'amount is required when using amountFilter',
+        );
+
+      const val = Number(amount);
+      const filter = amountFilter;
+
+      if (filter === 'lt') where.amount = { [Op.lt]: val };
+      else if (filter === 'gt') where.amount = { [Op.gt]: val };
+      else if (filter === 'eq') where.amount = val;
+      else
+        throw new BadRequestException(
+          'Invalid amountFilter. Use (lt), (gt), (eq)',
+        );
+    }
+
+    if (date && !this.isValidDDMMYYYY(date))
+      throw new BadRequestException('Invalid date format. Use DD-MM-YYYY');
+    if (startDate && !this.isValidDDMMYYYY(startDate))
+      throw new BadRequestException('Invalid startDate format. Use DD-MM-YYYY');
+    if (endDate && !this.isValidDDMMYYYY(endDate))
+      throw new BadRequestException('Invalid endDate format. Use DD-MM-YYYY');
+
+    if (date) {
+      const s = this.parseDateStart(date);
+      const e = this.parseDateEnd(date);
+      where.donationDate = { [Op.between]: [s, e] };
+    }
+
+    if (startDate && endDate) {
+      const s = this.parseDateStart(startDate);
+      const e = this.parseDateEnd(endDate);
+      if (s > e)
+        throw new BadRequestException(
+          'startDate cannot be greater than endDate',
+        );
+      where.donationDate = { [Op.between]: [s, e] };
+    }
+
+    const donations = await this.donationModel.findAll({
+      where,
+      order: [['donationDate', 'DESC']],
+      include: [
+        { model: State, attributes: ['name'] },
+        { model: City, attributes: ['name'] },
+      ],
+    });
+
+    // Create workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Donations');
+
+    // Define columns
+    worksheet.columns = [
+      { header: 'Serial Number', key: 'serialNumber', width: 20 },
+      { header: 'Donation Date', key: 'date', width: 15 },
+      { header: 'First Name', key: 'firstName', width: 20 },
+      { header: 'Last Name', key: 'lastName', width: 20 },
+      { header: 'Phone Number', key: 'phone', width: 15 },
+      { header: 'Amount', key: 'amount', width: 12 },
+      { header: 'Method', key: 'method', width: 12 },
+      { header: 'Bank Name', key: 'bankName', width: 20 },
+      { header: 'Reference Number', key: 'referenceNumber', width: 20 },
+      { header: 'ID Proof Type', key: 'idProofType', width: 15 },
+      { header: 'ID Proof Number', key: 'idProofNumber', width: 20 },
+      { header: 'Street Address', key: 'streetAddress', width: 30 },
+      { header: 'Custom Address', key: 'customAddress', width: 30 },
+      { header: 'State', key: 'state', width: 15 },
+      { header: 'City', key: 'city', width: 15 },
+      { header: 'Is Void', key: 'isVoid', width: 10 },
+      { header: 'Void Reason', key: 'voidReason', width: 30 },
+    ];
+
+    // Style header row
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD3D3D3' },
+    };
+
+    // Add data rows
+    donations.forEach((donation) => {
+      worksheet.addRow({
+        serialNumber: donation.donationSerialNumber,
+        date: donation.donationDate
+          ? new Date(donation.donationDate).toLocaleDateString('en-GB')
+          : '',
+        firstName: donation.donorFirstName,
+        lastName: donation.donorLastName,
+        phone: donation.donorPhoneNumber,
+        amount: donation.amount,
+        method: donation.method,
+        bankName: donation.bankName || '',
+        referenceNumber: donation.chequeOrUpiReferenceNumber || '',
+        idProofType: donation.donorIdProofType || '',
+        idProofNumber: donation.donorIdProofNumber || '',
+        streetAddress: donation.donorStreetAddress || '',
+        customAddress: donation.donorCustomAddress || '',
+        state: donation.state?.name || '',
+        city: donation.city?.name || '',
+        isVoid: donation.isVoid ? 'Yes' : 'No',
+        voidReason: donation.voidReason || '',
+      });
+    });
+
+    // Generate buffer
+    const buffer = await workbook.xlsx.writeBuffer();
+    return Buffer.from(buffer);
   }
 }
