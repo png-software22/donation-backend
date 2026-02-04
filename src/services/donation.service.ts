@@ -8,7 +8,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Donation } from '../models/donation.model';
 import { CreateDonationDto } from '../dto/create-donation.dto';
 import { Donor } from '../models/donor.model';
-import { literal, Op } from 'sequelize';
+import { Op } from 'sequelize';
 import { State } from 'src/models/state.model';
 import { City } from 'src/models/city.model';
 import puppeteer from 'puppeteer';
