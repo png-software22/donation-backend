@@ -51,6 +51,8 @@ export class DonationController {
     @Query('endDate') endDate: string,
     @Query('method') method: string,
     @Query('isVoid') isVoid: string,
+    @Query('includeVoid') includeVoid: string,
+    @Query('onlyVoid') onlyVoid: string,
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
   ) {
@@ -65,6 +67,8 @@ export class DonationController {
       endDate,
       method,
       isVoid,
+      includeVoid,
+      onlyVoid,
       page,
       pageSize,
     });

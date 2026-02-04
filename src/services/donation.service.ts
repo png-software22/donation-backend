@@ -74,6 +74,8 @@ export class DonationService {
       startDate,
       endDate,
       isVoid,
+      includeVoid,
+      onlyVoid,
       page = 1,
       pageSize = 10,
     } = filters;
@@ -90,12 +92,20 @@ export class DonationService {
     if (cityId) where.donorCityId = cityId;
     if (method) where.method = method;
 
-    // Filter by void status - defaults to false (non-voided donations)
-    if (isVoid !== undefined && isVoid !== null && isVoid !== '') {
+    // Enhanced void filtering logic
+    if (onlyVoid === 'true' || onlyVoid === '1') {
+      // Show only voided donations
+      where.isVoid = true;
+    } else if (includeVoid === 'true' || includeVoid === '1') {
+      // Show all donations (both voided and non-voided)
+      // Don't add any filter on isVoid
+    } else if (isVoid !== undefined && isVoid !== null && isVoid !== '') {
+      // Legacy support for isVoid parameter
       const voidValue = isVoid === 'true' || isVoid === '1';
       where.isVoid = voidValue;
     } else {
-      where.isVoid = false; // Default: exclude voided donations
+      // Default: exclude voided donations
+      where.isVoid = false;
     }
 
     if (amountFilter) {
