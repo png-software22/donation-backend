@@ -244,7 +244,7 @@ export class DonationService {
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
-      margin: { top: '15mm', bottom: '15mm', left: '15mm', right: '15mm' },
+      margin: { top: '5mm', left: '5mm', right: '5mm' },
     });
 
     await browser.close();
