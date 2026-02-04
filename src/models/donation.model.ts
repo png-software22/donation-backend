@@ -86,4 +86,16 @@ export class Donation extends Model {
 
   @BelongsTo(() => City)
   city: City;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  isVoid: boolean;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: true,
+  })
+  voidReason: string;
 }

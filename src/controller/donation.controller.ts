@@ -6,10 +6,12 @@ import {
   Post,
   Query,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { DonationService } from '../services/donation.service';
 import { CreateDonationDto } from '../dto/create-donation.dto';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { VoidDonationDto } from '../dto/void-donation.dto';
 
 @Controller('donations')
 @UseGuards(JwtAuthGuard)
@@ -48,6 +50,7 @@ export class DonationController {
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
     @Query('method') method: string,
+    @Query('isVoid') isVoid: string,
     @Query('page') page: number = 1,
     @Query('pageSize') pageSize: number = 10,
   ) {
@@ -61,8 +64,17 @@ export class DonationController {
       startDate,
       endDate,
       method,
+      isVoid,
       page,
       pageSize,
     });
+  }
+
+  @Patch('void/:serialNumber')
+  async voidDonation(
+    @Param('serialNumber') serialNumber: string,
+    @Body() dto: VoidDonationDto,
+  ) {
+    return await this.donationService.voidDonation(serialNumber, dto.reason);
   }
 }

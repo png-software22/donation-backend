@@ -73,6 +73,7 @@ export class DonationService {
       date,
       startDate,
       endDate,
+      isVoid,
       page = 1,
       pageSize = 10,
     } = filters;
@@ -88,6 +89,14 @@ export class DonationService {
     if (stateId) where.donorStateId = stateId;
     if (cityId) where.donorCityId = cityId;
     if (method) where.method = method;
+
+    // Filter by void status - defaults to false (non-voided donations)
+    if (isVoid !== undefined && isVoid !== null && isVoid !== '') {
+      const voidValue = isVoid === 'true' || isVoid === '1';
+      where.isVoid = voidValue;
+    } else {
+      where.isVoid = false; // Default: exclude voided donations
+    }
 
     if (amountFilter) {
       if (!amount)
@@ -250,5 +259,31 @@ export class DonationService {
     await browser.close();
 
     return new StreamableFile(pdfBuffer);
+  }
+
+  async voidDonation(serialNumber: string, reason?: string) {
+    const donation = await this.donationModel.findOne({
+      where: { donationSerialNumber: serialNumber },
+    });
+
+    if (!donation) {
+      throw new NotFoundException(
+        `Donation with serial number ${serialNumber} not found`,
+      );
+    }
+
+    if (donation.isVoid) {
+      throw new BadRequestException('Donation is already voided');
+    }
+
+    donation.isVoid = true;
+    donation.voidReason = reason || 'No reason provided';
+    await donation.save();
+
+    return {
+      success: true,
+      message: 'Donation marked as void successfully',
+      data: donation,
+    };
   }
 }
