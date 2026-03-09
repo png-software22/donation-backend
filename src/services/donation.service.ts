@@ -167,7 +167,7 @@ export class DonationService {
 
     const result = await this.donationModel.findAndCountAll({
       where,
-      limit: pageSize,
+      limit: +pageSize,
       offset,
       order: [['donationDate', 'DESC']],
       include: [

@@ -31,14 +31,14 @@
     "bcrypt": "^6.0.0",
     "class-validator": "^0.14.3",
     "exceljs": "^4.4.0",
+    "mysql2": "^3.19.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "puppeteer": "^24.33.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sequelize": "^6.37.7",
-    "sequelize-typescript": "^2.1.6",
-    "mysql2": "^3.6.0"
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
