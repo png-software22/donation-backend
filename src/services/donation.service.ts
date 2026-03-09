@@ -236,6 +236,7 @@ export class DonationService {
 
   async generateDonationReceipt(serialNumber: any): Promise<StreamableFile> {
     const browser = await puppeteer.launch({
+      executablePath: puppeteer.executablePath(),
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });

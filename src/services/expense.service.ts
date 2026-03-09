@@ -32,6 +32,7 @@ export class ExpenseService {
 
   async generateExpenseReceipt(serialNumber: any): Promise<StreamableFile> {
     const browser = await puppeteer.launch({
+      executablePath: puppeteer.executablePath(),
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
