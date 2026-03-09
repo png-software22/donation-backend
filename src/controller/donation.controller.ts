@@ -13,7 +13,6 @@ import { DonationService } from '../services/donation.service';
 import { CreateDonationDto } from '../dto/create-donation.dto';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { VoidDonationDto } from '../dto/void-donation.dto';
-import { Response } from 'express';
 
 @Controller('donations')
 @UseGuards(JwtAuthGuard)
@@ -76,12 +75,12 @@ export class DonationController {
     });
   }
 
-  @Patch('void/:serialNumber')
-  async voidDonation(
-    @Param('serialNumber') serialNumber: string,
-    @Body() dto: VoidDonationDto,
-  ) {
-    return await this.donationService.voidDonation(serialNumber, dto.reason);
+  @Patch('void/:id')
+  async voidDonation(@Param('id') id: string, @Body('reason') reason?: string) {
+    return this.donationService.voidDonation(
+      id,
+      reason ?? 'Without specified reason',
+    );
   }
 
   @Get('export/excel')
@@ -98,7 +97,7 @@ export class DonationController {
     @Query('isVoid') isVoid: string,
     @Query('includeVoid') includeVoid: string,
     @Query('onlyVoid') onlyVoid: string,
-    @Res() res: Response,
+    @Res() res: any,
   ) {
     const buffer = await this.donationService.exportDonationsToExcel({
       phone,
@@ -115,14 +114,11 @@ export class DonationController {
       onlyVoid,
     });
 
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    );
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=donations_${Date.now()}.xlsx`,
-    );
+    res.set({
+      'Content-Type':
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename="donations_${Date.now()}.xlsx"`,
+    });
     res.send(buffer);
   }
 }

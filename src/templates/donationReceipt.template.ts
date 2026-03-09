@@ -196,7 +196,7 @@ export const DonationReceiptTemplate = (data) => {
 
           <td class="font-semibold w-[15%] pl-2">Cheque No.:</td>
           <td class="border-b border-black w-[20%]">
-            ${data.chequeOrUpiReferenceNumber}
+            ${data.chequeOrUpiReferenceNumber ?? ''}
           </td>
         </tr>
       </table>
@@ -208,7 +208,7 @@ export const DonationReceiptTemplate = (data) => {
           <td class="border-b border-black w-[30%]">Donation Account</td>
 
           <td class="font-semibold w-[15%] pl-2">Bank Name:</td>
-          <td class="border-b border-black w-[30%]">${data.bankName}</td>
+          <td class="border-b border-black w-[30%]">${data.bankName ?? ''}</td>
         </tr>
       </table>
 
@@ -338,7 +338,7 @@ export const DonationReceiptTemplate = (data) => {
 
           <td class="font-semibold w-[15%] pl-2">Cheque No.:</td>
           <td class="border-b border-black w-[20%]">
-            ${data.chequeOrUpiReferenceNumber}
+            ${data.chequeOrUpiReferenceNumber?? ''}
           </td>
         </tr>
       </table>
@@ -350,7 +350,7 @@ export const DonationReceiptTemplate = (data) => {
           <td class="border-b border-black w-[30%]">Donation Account</td>
 
           <td class="font-semibold w-[15%] pl-2">Bank Name:</td>
-          <td class="border-b border-black w-[30%]">${data.bankName}</td>
+          <td class="border-b border-black w-[30%]">${data.bankName?? ''}</td>
         </tr>
       </table>
 

@@ -283,13 +283,35 @@ export class DonationService {
       );
     }
 
-    if (donation.isVoid) {
+    if (donation.dataValues.isVoid) {
       throw new BadRequestException('Donation is already voided');
     }
 
-    donation.isVoid = true;
-    donation.voidReason = reason || 'No reason provided';
-    await donation.save();
+    try {
+      // console.log('donatiapn isss', donation)
+      // donation.dataValues.isVoid = true;
+      // donation.dataValues.voidReason = reason || 'No reason provided';
+      // await donation.setAttributes({
+      //   isVoid: true,
+      //   voidReason: reason || 'No reason provided',
+      // }) // Save the updated donation
+      // donation.update({
+
+      // })
+      await this.donationModel.update(
+        {
+          isVoid: true,
+          voidReason: reason || 'No reason provided',
+        },
+        {
+          where: { donationSerialNumber: serialNumber },
+        },
+      );
+    } catch (error) {
+      throw new BadRequestException(
+        'Failed to void the donation: ' + error.message,
+      );
+    }
 
     return {
       success: true,
@@ -394,21 +416,25 @@ export class DonationService {
 
     // Define columns
     worksheet.columns = [
-      { header: 'Serial Number', key: 'serialNumber', width: 20 },
-      { header: 'Donation Date', key: 'date', width: 15 },
-      { header: 'First Name', key: 'firstName', width: 20 },
-      { header: 'Last Name', key: 'lastName', width: 20 },
-      { header: 'Phone Number', key: 'phone', width: 15 },
+      { header: 'Serial Number', key: 'donationSerialNumber', width: 20 },
+      { header: 'Donation Date', key: 'donationDate', width: 15 },
+      { header: 'First Name', key: 'donorFirstName', width: 20 },
+      { header: 'Last Name', key: 'donorLastName', width: 20 },
+      { header: 'Phone Number', key: 'donorPhoneNumber', width: 15 },
       { header: 'Amount', key: 'amount', width: 12 },
       { header: 'Method', key: 'method', width: 12 },
       { header: 'Bank Name', key: 'bankName', width: 20 },
-      { header: 'Reference Number', key: 'referenceNumber', width: 20 },
-      { header: 'ID Proof Type', key: 'idProofType', width: 15 },
-      { header: 'ID Proof Number', key: 'idProofNumber', width: 20 },
-      { header: 'Street Address', key: 'streetAddress', width: 30 },
-      { header: 'Custom Address', key: 'customAddress', width: 30 },
-      { header: 'State', key: 'state', width: 15 },
-      { header: 'City', key: 'city', width: 15 },
+      {
+        header: 'Reference Number',
+        key: 'chequeOrUpiReferenceNumber',
+        width: 20,
+      },
+      { header: 'ID Proof Type', key: 'donorIdProofType', width: 15 },
+      { header: 'ID Proof Number', key: 'donorIdProofNumber', width: 20 },
+      { header: 'Street Address', key: 'donorStreetAddress', width: 30 },
+      { header: 'Custom Address', key: 'donorCustomAddress', width: 30 },
+      { header: 'State', key: 'stateName', width: 15 },
+      { header: 'City', key: 'cityName', width: 15 },
       { header: 'Is Void', key: 'isVoid', width: 10 },
       { header: 'Void Reason', key: 'voidReason', width: 30 },
     ];
@@ -422,25 +448,26 @@ export class DonationService {
     };
 
     // Add data rows
-    donations.forEach((donation) => {
+    donations.forEach((donationVal) => {
+      const donation: any = donationVal.dataValues;
       worksheet.addRow({
-        serialNumber: donation.donationSerialNumber,
-        date: donation.donationDate
+        donationSerialNumber: donation.donationSerialNumber,
+        donationDate: donation.donationDate
           ? new Date(donation.donationDate).toLocaleDateString('en-GB')
           : '',
-        firstName: donation.donorFirstName,
-        lastName: donation.donorLastName,
-        phone: donation.donorPhoneNumber,
+        donorFirstName: donation.donorFirstName,
+        donorLastName: donation.donorLastName,
+        donorPhoneNumber: donation.donorPhoneNumber,
         amount: donation.amount,
         method: donation.method,
         bankName: donation.bankName || '',
-        referenceNumber: donation.chequeOrUpiReferenceNumber || '',
-        idProofType: donation.donorIdProofType || '',
-        idProofNumber: donation.donorIdProofNumber || '',
-        streetAddress: donation.donorStreetAddress || '',
-        customAddress: donation.donorCustomAddress || '',
-        state: donation.state?.name || '',
-        city: donation.city?.name || '',
+        chequeOrUpiReferenceNumber: donation.chequeOrUpiReferenceNumber || '',
+        donorIdProofType: donation.donorIdProofType || '',
+        donorIdProofNumber: donation.donorIdProofNumber || '',
+        donorStreetAddress: donation.donorStreetAddress || '',
+        donorCustomAddress: donation.donorCustomAddress || '',
+        stateName: donation.state?.name || '',
+        cityName: donation.city?.name || '',
         isVoid: donation.isVoid ? 'Yes' : 'No',
         voidReason: donation.voidReason || '',
       });
