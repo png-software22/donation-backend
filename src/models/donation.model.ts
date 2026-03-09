@@ -41,10 +41,10 @@ export class Donation extends Model {
   donationDate: Date;
 
   @Column({
-    type: DataType.ENUM(...Object.values(DonationMethods)),
+    type: DataType.STRING, // Change from ENUM to STRING for MySQL compatibility
     allowNull: false,
   })
-  method: DonationMethods;
+  method: string; // Update the type if necessary
 
   @Column
   bankName: string;

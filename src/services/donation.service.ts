@@ -288,16 +288,6 @@ export class DonationService {
     }
 
     try {
-      // console.log('donatiapn isss', donation)
-      // donation.dataValues.isVoid = true;
-      // donation.dataValues.voidReason = reason || 'No reason provided';
-      // await donation.setAttributes({
-      //   isVoid: true,
-      //   voidReason: reason || 'No reason provided',
-      // }) // Save the updated donation
-      // donation.update({
-
-      // })
       await this.donationModel.update(
         {
           isVoid: true,

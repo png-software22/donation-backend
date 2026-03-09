@@ -38,12 +38,12 @@ import { JwtStrategy } from './guards/jwt.stategy';
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
-        dialect: 'postgres',
-        host: config.get('POSTGRES_HOST'),
-        port: 5432,
-        username: config.get('POSTGRES_USERNAME'),
-        password: config.get('POSTGRES_PASSWORD'),
-        database: config.get('POSTGRES_DB_NAME'),
+        dialect: 'mysql', // Change from 'postgres' to 'mysql'
+        host: config.get('MYSQL_HOST'), // Update environment variable names
+        port: 3306, // Default MySQL port
+        username: config.get('MYSQL_USERNAME'),
+        password: config.get('MYSQL_PASSWORD'),
+        database: config.get('MYSQL_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
         sync: { alter: true }, // Automatically updates tables without dropping them
