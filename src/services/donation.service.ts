@@ -2,7 +2,6 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
-  StreamableFile,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Donation } from '../models/donation.model';
@@ -11,7 +10,6 @@ import { Donor } from '../models/donor.model';
 import { Op } from 'sequelize';
 import { State } from 'src/models/state.model';
 import { City } from 'src/models/city.model';
-import puppeteer from 'puppeteer';
 import { DonationReceiptTemplate } from 'src/templates/donationReceipt.template';
 import * as ExcelJS from 'exceljs';
 
@@ -234,14 +232,8 @@ export class DonationService {
     }
   }
 
-  async generateDonationReceipt(serialNumber: any): Promise<StreamableFile> {
-    const browser = await puppeteer.launch({
-      executablePath: puppeteer.executablePath(),
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-
-    const res = await this.donationModel.findOne({
+  async generateDonationReceipt(serialNumber: any): Promise<string> {
+    const donation = await this.donationModel.findOne({
       where: {
         donationSerialNumber: serialNumber,
       },
@@ -257,20 +249,13 @@ export class DonationService {
       ],
     });
 
-    const page = await browser.newPage();
-    const html = DonationReceiptTemplate(res?.dataValues);
+    if (!donation) {
+      throw new NotFoundException(
+        `Donation with serial number ${serialNumber} not found`,
+      );
+    }
 
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: { top: '5mm', left: '5mm', right: '5mm' },
-    });
-
-    await browser.close();
-
-    return new StreamableFile(pdfBuffer);
+    return DonationReceiptTemplate(donation.dataValues);
   }
 
   async voidDonation(serialNumber: string, reason?: string) {
