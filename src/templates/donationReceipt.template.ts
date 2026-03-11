@@ -239,6 +239,8 @@ export const DonationReceiptTemplate = (data) => {
           ${getDayName(data.donationDate)}, ${formatDate(data.donationDate)}
         </div>
       </div>
+    <div class="mt-1 mb-1 border-t" style="border-top: 1px dotted black w-[40%]"></div>
+
     </div>
 
     <div class="flex">
@@ -338,7 +340,7 @@ export const DonationReceiptTemplate = (data) => {
 
           <td class="font-semibold w-[15%] pl-2">Cheque No.:</td>
           <td class="border-bb border-black w-[20%]">
-            ${data.chequeOrUpiReferenceNumber?? ''}
+            ${data.chequeOrUpiReferenceNumber ?? ''}
           </td>
         </tr>
       </table>
@@ -350,7 +352,7 @@ export const DonationReceiptTemplate = (data) => {
           <td class="border-bb border-black w-[30%]">Donation Account</td>
 
           <td class="font-semibold w-[15%] pl-2">Bank Name:</td>
-          <td class="border-bb border-black w-[30%]">${data.bankName?? ''}</td>
+          <td class="border-bb border-black w-[30%]">${data.bankName ?? ''}</td>
         </tr>
       </table>
 
@@ -381,6 +383,8 @@ export const DonationReceiptTemplate = (data) => {
           ${getDayName(data.donationDate)}, ${formatDate(data.donationDate)}
         </div>
       </div>
+    <div class="mt-1 mb-1 border-t" style="border-top: 1px dotted black w-[40%]"></div>
+
     </div>
   </body>
 </html>
