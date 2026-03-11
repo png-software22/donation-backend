@@ -135,9 +135,9 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Serial No.:</td>
-          <td class="border-b border-black w-[40%]">DA0009597</td>
+          <td class="border-bb border-black w-[40%]">DA0009597</td>
           <td class="font-semibold w-[10%] pl-4">Date</td>
-          <td class="border-b border-black text-right">
+          <td class="border-bb border-black text-right">
             ${formatDate(data.donationDate)}
           </td>
         </tr>
@@ -147,7 +147,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Name:</td>
-          <td class="border-b border-black">
+          <td class="border-bb border-black">
             ${data.donorFirstName} ${data.donorLastName}
           </td>
         </tr>
@@ -157,7 +157,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Address:</td>
-          <td class="border-b border-black">
+          <td class="border-bb border-black">
             ${data?.customAddress ? data?.customAddress : [data.donorStreetAddress, data.city?.name, data.state?.name].filter(Boolean).join(', ')}
           </td>
         </tr>
@@ -167,14 +167,14 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Mobile No.:</td>
-          <td class="border-b border-black w-[30%]">
+          <td class="border-bb border-black w-[30%]">
             ${data.donorPhoneNumber}
           </td>
           <td class="font-semibold w-[20%] pl-2">ID Proof Details:</td>
-          <td class="border-b border-black w-[15%]">
+          <td class="border-bb border-black w-[15%]">
             ${data.donorIdProofType}
           </td>
-          <td class="border-b border-black w-[20%] pl-2">
+          <td class="border-bb border-black w-[20%] pl-2">
             ${data.donorIdProofNumber}
           </td>
         </tr>
@@ -184,7 +184,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Amount in Words:</td>
-          <td class="border-b border-black">${numberToWords(data?.amount)}</td>
+          <td class="border-bb border-black">${numberToWords(data?.amount)}</td>
         </tr>
       </table>
 
@@ -192,10 +192,10 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">By Cash / Cheque:</td>
-          <td class="border-b border-black w-[20%]">${data.method}</td>
+          <td class="border-bb border-black w-[20%]">${data.method}</td>
 
           <td class="font-semibold w-[15%] pl-2">Cheque No.:</td>
-          <td class="border-b border-black w-[20%]">
+          <td class="border-bb border-black w-[20%]">
             ${data.chequeOrUpiReferenceNumber ?? ''}
           </td>
         </tr>
@@ -205,10 +205,10 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Receipt Type:</td>
-          <td class="border-b border-black w-[30%]">Donation Account</td>
+          <td class="border-bb border-black w-[30%]">Donation Account</td>
 
           <td class="font-semibold w-[15%] pl-2">Bank Name:</td>
-          <td class="border-b border-black w-[30%]">${data.bankName ?? ''}</td>
+          <td class="border-bb border-black w-[30%]">${data.bankName ?? ''}</td>
         </tr>
       </table>
 
@@ -277,9 +277,9 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Serial No.:</td>
-          <td class="border-b border-black w-[40%]">DA0009597</td>
+          <td class="border-bb border-black w-[40%]">DA0009597</td>
           <td class="font-semibold w-[10%] pl-4">Date</td>
-          <td class="border-b border-black text-right">
+          <td class="border-bb border-black text-right">
             ${formatDate(data.donationDate)}
           </td>
         </tr>
@@ -289,7 +289,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Name:</td>
-          <td class="border-b border-black">
+          <td class="border-bb border-black">
             ${data.donorFirstName} ${data.donorLastName}
           </td>
         </tr>
@@ -299,7 +299,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Address:</td>
-          <td class="border-b border-black">
+          <td class="border-bb border-black">
             ${data?.customAddress ? data?.customAddress : [data.donorStreetAddress, data.city?.name, data.state?.name].filter(Boolean).join(', ')}
           </td>
         </tr>
@@ -309,14 +309,14 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Mobile No.:</td>
-          <td class="border-b border-black w-[30%]">
+          <td class="border-bb border-black w-[30%]">
             ${data.donorPhoneNumber}
           </td>
           <td class="font-semibold w-[20%] pl-2">ID Proof Details:</td>
-          <td class="border-b border-black w-[15%]">
+          <td class="border-bb border-black w-[15%]">
             ${data.donorIdProofType}
           </td>
-          <td class="border-b border-black w-[20%] pl-2">
+          <td class="border-bb border-black w-[20%] pl-2">
             ${data.donorIdProofNumber}
           </td>
         </tr>
@@ -326,7 +326,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Amount in Words:</td>
-          <td class="border-b border-black">${numberToWords(data?.amount)}</td>
+          <td class="border-bb border-black">${numberToWords(data?.amount)}</td>
         </tr>
       </table>
 
@@ -334,10 +334,10 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">By Cash / Cheque:</td>
-          <td class="border-b border-black w-[20%]">${data.method}</td>
+          <td class="border-bb border-black w-[20%]">${data.method}</td>
 
           <td class="font-semibold w-[15%] pl-2">Cheque No.:</td>
-          <td class="border-b border-black w-[20%]">
+          <td class="border-bb border-black w-[20%]">
             ${data.chequeOrUpiReferenceNumber?? ''}
           </td>
         </tr>
@@ -347,10 +347,10 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Receipt Type:</td>
-          <td class="border-b border-black w-[30%]">Donation Account</td>
+          <td class="border-bb border-black w-[30%]">Donation Account</td>
 
           <td class="font-semibold w-[15%] pl-2">Bank Name:</td>
-          <td class="border-b border-black w-[30%]">${data.bankName?? ''}</td>
+          <td class="border-bb border-black w-[30%]">${data.bankName?? ''}</td>
         </tr>
       </table>
 
