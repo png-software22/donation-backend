@@ -8,6 +8,7 @@ export class CreateDonorDTO {
   stateId: number;
   cityId: number;
   customAddress?:string;
+  email?: string;
 }
 
 export class UpdateDonorDto {
@@ -20,4 +21,5 @@ export class UpdateDonorDto {
   stateId?: number;
   idProofType?: string;
   idProofNumber?: string;
+  email?: string;
 }

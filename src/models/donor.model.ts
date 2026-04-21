@@ -46,6 +46,10 @@ export class Donor extends Model {
   @Column
   customAddress: string;
 
+  @AllowNull(true)
+  @Column
+  email: string;
+
   @ForeignKey(() => State)
   @Column
   stateId: number;

@@ -111,7 +111,7 @@ export const DonationReceiptTemplate = (data) => {
         <div class="text-sm">|| Shree Ganeshay Namah ||</div>
         <div class="text-xl font-bold">SHREE SANTOSH CHARITABLE TRUST</div>
         <div class="text-xs">
-          80G Regd. No. E-26036 (MUMBAI) Date: 07/09/2009 · PAN No.: AAITS6540D
+          80G Regd. No. E-26036 (MUMBAI) Date: 07/09/2009 · PAN No.: AAITS6540D · Reg: AAITS6540D24MB01
         </div>
 
         <div class="text-xs mt-1 leading-tight">
