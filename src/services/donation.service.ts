@@ -33,11 +33,10 @@ export class DonationService {
       throw new BadRequestException('Amount must be greater than 0');
 
     const donationDate = this.parseDateStart(dto.date!);
-    const serial = 'DN-' + Date.now();
 
     const donation = await this.donationModel.create({
       donorId: dto.donorId,
-      donationSerialNumber: serial,
+      donationSerialNumber: '', // temporary, will be updated with row id
       method: dto.method,
       chequeOrUpiReferenceNumber:
         dto.method === 'CASH' ? null : dto.referenceNo,
@@ -55,9 +54,19 @@ export class DonationService {
       donorCityId: donor.dataValues.cityId,
     });
 
+    // Generate serial number with row id
+    const serial = `DA-${donation.id}`;
+    await this.donationModel.update(
+      { donationSerialNumber: serial },
+      { where: { id: donation.id } },
+    );
+
+    // Fetch updated donation
+    const updatedDonation = await this.donationModel.findByPk(donation.id);
+
     return {
       message: 'Donation Saved Successfully',
-      donation,
+      donation: updatedDonation,
     };
   }
 

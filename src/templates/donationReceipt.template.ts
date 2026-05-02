@@ -135,7 +135,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Serial No.:</td>
-          <td class="border-bb border-black w-[40%]">DA0009597</td>
+          <td class="border-bb border-black w-[40%]">${data.donationSerialNumber}</td>
           <td class="font-semibold w-[10%] pl-4">Date</td>
           <td class="border-bb border-black text-right">
             ${formatDate(data.donationDate)}
@@ -279,7 +279,7 @@ export const DonationReceiptTemplate = (data) => {
       <table class="w-full mb-1">
         <tr>
           <td class="font-semibold w-[25%]">Serial No.:</td>
-          <td class="border-bb border-black w-[40%]">DA0009597</td>
+          <td class="border-bb border-black w-[40%]">${data.donationSerialNumber}</td>
           <td class="font-semibold w-[10%] pl-4">Date</td>
           <td class="border-bb border-black text-right">
             ${formatDate(data.donationDate)}
