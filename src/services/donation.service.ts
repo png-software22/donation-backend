@@ -55,7 +55,7 @@ export class DonationService {
     });
 
     // Generate serial number with row id
-    const serial = `DA-${donation.id}`;
+    const serial = `DA000${donation.id}`;
     await this.donationModel.update(
       { donationSerialNumber: serial },
       { where: { id: donation.id } },
