@@ -46,7 +46,7 @@ import { JwtStrategy } from './guards/jwt.stategy';
         database: config.get('MYSQL_DB_NAME'),
         autoLoadModels: true,
         synchronize: true,
-        sync: { alter: true }, // Automatically updates tables without dropping them
+        sync: { alter: false }, // Automatically updates tables without dropping them
         models: [City, State, Donor, Donation, Expense, User],
       }),
       inject: [ConfigService],
